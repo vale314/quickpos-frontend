@@ -1,15 +1,24 @@
-import { DarkTheme, DefaultTheme, ThemeProvider } from 'expo-router';
-import { useColorScheme } from 'react-native';
+// src/app/_layout.tsx
+import { QueryProvider } from '@/providers/QueryProvider'; // Ajustado con tu alias
+import { Stack } from 'expo-router';
+import { StatusBar } from 'expo-status-bar';
 
-import { AnimatedSplashOverlay } from '@/components/animated-icon';
-import AppTabs from '@/components/app-tabs';
+// ¡CRÍTICO! Importación obligatoria para que NativeWind funcione
+import '@/global.css';
 
-export default function TabLayout() {
-  const colorScheme = useColorScheme();
+export default function RootLayout() {
   return (
-    <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <AnimatedSplashOverlay />
-      <AppTabs />
-    </ThemeProvider>
+    <QueryProvider>
+      <StatusBar style="auto" />
+      {/* El Stack base maneja el enrutamiento principal. 
+        Ocultamos el header porque cada pantalla (o los tabs) manejarán el suyo.
+      */}
+      <Stack screenOptions={{ headerShown: false }}>
+        <Stack.Screen name="index" />
+        <Stack.Screen name="(auth)" />
+        <Stack.Screen name="(onboarding)" />
+        <Stack.Screen name="(tabs)" />
+      </Stack>
+    </QueryProvider>
   );
 }
