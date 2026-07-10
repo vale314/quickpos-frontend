@@ -16,6 +16,10 @@ export const apiClient = axios.create({
 // Interceptor de Request: Antes de que cualquier petición salga, le pegamos el JWT
 apiClient.interceptors.request.use(
   async (config) => {
+    // AGREGA ESTO PARA DEPURAR
+  console.log("--- INTENTANDO PETICIÓN ---");
+  console.log("URL Completa:", apiClient.getUri(config));
+
     const token = await storage.getToken();
     if (token && config.headers) {
       config.headers.Authorization = `Bearer ${token}`;

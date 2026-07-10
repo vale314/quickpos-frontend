@@ -30,14 +30,27 @@ export default function LoginScreen() {
     },
   });
 
-  const onSubmit = async (data: LoginForm) => {
+const onSubmit = async (data: LoginForm) => {
     try {
       setIsLoading(true);
-      // Llamada real a tu servidor Spring Boot
+      // 1. Llamada real a tu servidor Spring Boot
       const response = await authApi.login(data);
+
+      console.log('Login exitoso:', response);
+
+      // 2. Extracción directa y fuertemente tipada (esquema plano)
+      const token = response.token;
+      const email = response.email;
+
+      if (!token) {
+         console.warn("Cuidado: No se encontró el token en la respuesta");
+      }
+
+      // 3. Guardamos la sesión (creamos el objeto user al vuelo con el email)
+      await setSession(token, { email: email });
       
-      // Guardamos la sesión en Zustand y SecureStore
-      await setSession(response.token, response.user);
+      // 4. EL EMPUJÓN MÁGICO: Mandamos al usuario al Root para que el Auth Gate lo evalúe
+      router.replace('/');
       
     } catch (error: any) {
       console.error('Error en login:', error);

@@ -1,15 +1,15 @@
 // src/types/auth.types.ts
 
 export interface User {
-  id: string;
   email: string;
+  id?: string;
   firstName?: string;
   lastName?: string;
 }
 
 export interface AuthResponse {
   token: string;
-  user: User;
+  email: string; // <-- Ajustado al esquema plano que realmente manda tu Spring Boot
 }
 
 export interface LoginRequest {
